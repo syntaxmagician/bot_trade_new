@@ -1,0 +1,16 @@
+{
+  "entries": {
+    "C:\\Users\\vicor\\.openclaw\\openclaw.json": {
+      "lastKnownGood": {
+        "hash": "62aa2e9495ef3d616ccb07fb3644f7c63714d3ac54de6e8dd0b9b3a1bde7c542",
+        "bytes": 2966,
+        "mtimeMs": 1774581441941.1592,
+        "ctimeMs": 1774581441941.1592,
+        "hasMeta": true,
+        "gatewayMode": "local",
+        "observedAt": "2026-03-27T03:39:29.094Z"
+      },
+      "lastObservedSuspiciousSignature": null
+    }
+  }
+}

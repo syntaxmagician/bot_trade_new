@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "name": "pump-fun-scout",
+    "version": 1,
+    "venue": "pump.fun",
+    "schema": "See trading/README.md for field meanings."
+  },
+  "safety": {
+    "pauseRelativeToTradingDir": "PAUSE",
+    "skipIfRedFlagsGte": 2,
+    "hardSkipFlags": [
+      "wallet_dev_or_dumper"
+    ],
+    "redFlagLabels": [
+      "network_congestion",
+      "holder_fresh_funding",
+      "top_holders_too_small",
+      "market_cap_or_momentum_bad",
+      "wallet_dev_or_dumper"
+    ]
+  },
+  "scan": {
+    "fetchSignatureLimit": 30,
+    "maxTransactionsToDecode": 20,
+    "comment": "Recent pump.fun txs to pull from RPC per scout run — watch Alchemy CU/s."
+  },
+  "watch": {
+    "transport": "poll",
+    "pollIntervalMs": 2500,
+    "pollSignatureLimit": 30,
+    "minIntervalMs": 220,
+    "maxQueue": 500,
+    "maxSeenSignatures": 8000,
+    "logQuietReasons": false,
+    "comment": "transport poll = HTTP getSignaturesForAddress (Alchemy OK). websocket = logsSubscribe (banyak provider tidak support). pollIntervalMs = seberapa sering cek tx baru ke program pump."
+  },
+  "whaleSignal": {
+    "minBuySol": 5.0,
+    "comment": "Bonding-curve buy size (SOL notional) to treat as whale interest — minimal ~5 SOL."
+  },
+  "filters": {
+    "networkCongestion": {
+      "enabled": true,
+      "maxRecentPriorityFeeMicrolamports": 500000,
+      "comment": "If latest-window median priority fee exceeds this, count 1 red flag. Wire your daemon to real metrics."
+    },
+    "holderFreshFunding": {
+      "enabled": false,
+      "sampleTopHolders": 20,
+      "maxWalletFundingAgeHours": 24,
+      "comment": "Heavy on RPC; keep false until indexer or sampled funding-age fetch exists."
+    },
+    "topHolderBalanceSol": {
+      "enabled": true,
+      "thresholdSol": 0.2,
+      "sampleTopHolders": 10,
+      "flagIfAllSampleBelowThreshold": true,
+      "comment": "Weak heuristic; easy to game. Prefer later: concentration % from an API."
+    },
+    "marketCapEntry": {
+      "enabled": true,
+      "skipIfEstimatedMcSolAbove": 3000,
+      "skipIfPriceMultipleFromInferredLaunchGte": 5,
+      "comment": "Daemon uses virtual reserve drawdown vs global initial (ratio) + bonding curve complete. skipIfEstimatedMcSolAbove reserved for future MC/SOL proxy; ratio uses skipIfPriceMultipleFromInferredLaunchGte."
+    },
+    "walletDumper": {
+      "enabled": true,
+      "solscanTokenCreatorCheck": true,
+      "lookbackSignatures": 50,
+      "maxTxDecode": 25,
+      "windowMinutes": 90,
+      "minSellAfterBuy": 2,
+      "minSoldToBoughtRatio": 0.7,
+      "blacklistWallets": [
+        "bwamJz",
+        "9wRuFP"
+      ],
+      "comment": "solscanTokenCreatorCheck: jika true dan SOLSCAN_API_KEY di daemon/.env, skip jika buyer = Creator token (Solscan Pro token/meta). Tanpa key, langkah ini dilewati. Lalu blacklist + pola sell RPC."
+    }
+  },
+  "execution": {
+    "mode": "paper",
+    "paperInitialBalanceSol": 5,
+    "maxOpenPositions": 2,
+    "maxBuySolPerTrade": 0.05,
+    "slippageBps": 500,
+    "comment": "log_only = radar saja. paper = simulasi (quote + saldo virtual + win rate di state.paper). execute = swap nyata (TRADING_WALLET_SECRET). Never put keys in this file."
+  },
+  "walletIntelligence": {
+    "enabled": false,
+    "signalScore": 1,
+
+    "firstBuyers": 20,
+    "maxWalletsToClassify": 6,
+
+    "maxSignatures": 400,
+    "maxDecode": 80,
+    "perWalletSignatures": 18,
+
+    "historyWindowMinutes": 480,
+
+    "pauseMsBetweenDecodes": 50,
+    "pauseMsAfterEarlyBuyers": 150,
+    "pauseMsBetweenWallets": 250,
+    "pauseMsBetweenHistoryTxs": 45,
+    "pauseMsOnRateLimit": 3500,
+    "rateLimitCooldownMs": 90000,
+
+    "maxDumperRatio": 0.35,
+    "minSmartMoneyRatio": 0.22,
+
+    "sniperHighRatio": 0.45,
+    "sniperPenalty": true,
+    "sniperSizeMultiplier": 0.6,
+
+    "creatorWalletPrefixes": [],
+
+    "rules": {},
+
+    "comment": "Pacing fields reduce Alchemy 429 / CU burst. fetchPerWallet: lower maxWalletsToClassify + perWalletSignatures + maxDecode. On 429, wallet intel pauses ~rateLimitCooldownMs. Set pause* to 0 to disable delays (higher 429 risk)."
+  },
+  "whaleFollow": {
+    "exitMode": "jupiter_quote",
+    "takeProfitPct": 50,
+    "stopLossPct": 50,
+    "recoverModalFirst": true,
+    "recoverModalMinGainPct": 0,
+    "recoverModalPctOfEntrySol": 100,
+    "remainderTakeProfitPct": 9.9,
+    "trailingStopPctFromPeak": 20,
+    "takeProfitMcapSol": null,
+    "takeProfitMcapMultiple": null,
+    "takeProfitMcapPctFromEntry": null,
+    "stopLossMcapSol": null,
+    "stopLossMcapFractionOfEntry": null,
+    "stopLossMcapPctFromEntry": null,
+    "defaultTakeProfitMcapMultiple": 2.5,
+    "defaultStopLossMcapFractionOfEntry": 0.5,
+    "minEntryMcapSol": null,
+    "maxEntryMcapSol": null,
+    "pumpTokenDecimals": 6,
+    "mcapSolScale": 1,
+    "logMcapEachPoll": false,
+    "logPaperExitPoll": false,
+    "pollIntervalMs": 8000,
+    "lamportsReserveForFees": 15000000,
+    "staleChartExitMs": 120000,
+    "staleChartMovePct": 2,
+    "comment": "Legacy partial: once when full quote > entry (recoverModalMinGainPct 0). Pull recoverModalPctOfEntrySol% of entry SOL; remainder uses remainderTakeProfitPct vs post-partial quote baseline + trailing. staleChartExitMs 0 = off."
+  },
+  "chain": {
+    "cluster": "mainnet-beta",
+    "pumpProgramId": "6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P"
+  }
+}

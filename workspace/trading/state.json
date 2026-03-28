@@ -1,0 +1,30 @@
+{
+  "updatedAt": "2026-03-28T06:39:22.575Z",
+  "daemon": {
+    "status": "follow_ok",
+    "lastHeartbeatAt": "2026-03-28T06:37:20.397Z",
+    "paused": false,
+    "rpcHost": "solana-mainnet.g.alchemy.com"
+  },
+  "today": {
+    "dateUtc": "2026-03-28",
+    "signalsSeen": 29,
+    "skipped": 0,
+    "wouldBuy": 29,
+    "executedBuys": 0,
+    "paperBuys": 28,
+    "errors": 0,
+    "scoutRuns": 0,
+    "streamEvents": 29
+  },
+  "openPositions": [],
+  "lastError": null,
+  "paper": {
+    "virtualSolLamports": "4906337491",
+    "positions": [],
+    "wins": 15,
+    "losses": 13,
+    "breakeven": 0,
+    "totalRealizedPnlLamports": "-93662509"
+  }
+}

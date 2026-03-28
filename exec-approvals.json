@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "socket": {
+    "path": "C:\\Users\\vicor/.openclaw/exec-approvals.sock",
+    "token": "S_JWb4zqVdsmkLVklDICnEsv2iiREDRg"
+  },
+  "defaults": {},
+  "agents": {}
+}
